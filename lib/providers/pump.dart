@@ -3,18 +3,18 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import '../models/http_exception.dart';
 
-class Pumper with ChangeNotifier {
+class Pump with ChangeNotifier {
   String id;
   bool status;
 
-  Pumper({@required this.id, @required this.status});
+  Pump({@required this.id, @required this.status});
 
-  void _setPumper(bool newstatus) {
+  void _setPump(bool newstatus) {
     status = newstatus;
     notifyListeners();
   }
 
-  Future<void> togglePumperStatus(
+  Future<void> togglePumpStatus(
       String authToken, String userId, String id) async {
     final oldStatus = status;
     status = !status;
@@ -31,7 +31,7 @@ class Pumper with ChangeNotifier {
     print('pump $id status: $status');
     notifyListeners();
     if (response.statusCode >= 400) {
-      _setPumper(oldStatus);
+      _setPump(oldStatus);
       throw HttpException('Could not update to server!');
     }
   }

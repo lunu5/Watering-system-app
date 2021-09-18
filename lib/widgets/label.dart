@@ -10,8 +10,8 @@ class Label extends StatelessWidget {
       width: double.infinity,
       height: 60,
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
+        gradient: const LinearGradient(
+          colors: const [
             Colors.black87,
             Colors.transparent,
           ],
@@ -20,10 +20,10 @@ class Label extends StatelessWidget {
         ),
         borderRadius: BorderRadius.circular(18),
       ),
-      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
       child: Text(
         label,
-        style: TextStyle(fontSize: 26, color: Colors.white),
+        style: const TextStyle(fontSize: 26, color: Colors.white),
         textAlign: TextAlign.center,
         softWrap: true,
         overflow: TextOverflow.fade,

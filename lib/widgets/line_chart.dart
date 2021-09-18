@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 class LineChartWidget extends StatefulWidget {
   final data;
-  final his;
+  final history;
 
-  LineChartWidget(this.data, this.his);
+  LineChartWidget(this.data, this.history);
 
   @override
   _LineChartStateWidget createState() => _LineChartStateWidget();
@@ -27,13 +27,13 @@ class _LineChartStateWidget extends State<LineChartWidget> {
           aspectRatio: 1.70,
           child: Container(
             decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(
+                borderRadius: const BorderRadius.all(
                   Radius.circular(18),
                 ),
-                color: Color(0xff232d37)),
+                color: const Color(0xff232d37)),
             child: Padding(
               padding: const EdgeInsets.only(
-                  right: 18.0, left: 12.0, top: 40, bottom: 12),
+                  right: 18.0, left: 10.0, top: 46, bottom: 12),
               child: LineChart(
                 showAvg ? avgData() : mainData(),
               ),
@@ -41,8 +41,8 @@ class _LineChartStateWidget extends State<LineChartWidget> {
           ),
         ),
         SizedBox(
-          width: 90,
-          height: 34,
+          width: 85,
+          height: 40,
           child: TextButton(
             onPressed: () {
               setState(() {
@@ -52,7 +52,7 @@ class _LineChartStateWidget extends State<LineChartWidget> {
             child: Text(
               'History',
               style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 18,
                   color:
                       showAvg ? Colors.white.withOpacity(0.5) : Colors.white),
             ),
@@ -126,6 +126,7 @@ class _LineChartStateWidget extends State<LineChartWidget> {
         LineChartBarData(
           spots: [...flSpot],
           isCurved: true,
+          curveSmoothness: 0.3,
           colors: gradientColors,
           barWidth: 5,
           isStrokeCapRound: true,
@@ -144,8 +145,8 @@ class _LineChartStateWidget extends State<LineChartWidget> {
 
   LineChartData avgData() {
     List<FlSpot> flSpot = [];
-    for (int i = 0; i < widget.his.length; i += 1) {
-      flSpot.add(FlSpot(i.toDouble(), widget.his[i].toDouble()));
+    for (int i = 0; i < widget.history.length; i += 1) {
+      flSpot.add(FlSpot(i.toDouble(), widget.history[i].toDouble()));
     }
     return LineChartData(
       lineTouchData: LineTouchData(enabled: true),
@@ -211,6 +212,7 @@ class _LineChartStateWidget extends State<LineChartWidget> {
         LineChartBarData(
           spots: [...flSpot],
           isCurved: true,
+          curveSmoothness: 0.5,
           colors: [
             ColorTween(begin: gradientColors[0], end: gradientColors[1])
                 .lerp(0.2),

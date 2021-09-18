@@ -9,6 +9,7 @@ class Auth extends ChangeNotifier {
   String _token;
   String _userId;
   String _pumpTopic;
+  String _sensorTopic;
 
   String get token {
     if (_token != null) return _token;
@@ -20,12 +21,21 @@ class Auth extends ChangeNotifier {
     return null;
   }
 
+  String get sensorTopic {
+    if (_sensorTopic != null) return _sensorTopic;
+    return null;
+  }
+
   bool get isAuth {
     return token != null;
   }
 
-  bool get isTopic {
+  bool get isPumpTopic {
     return pumpTopic != null;
+  }
+
+  bool get isSensorTopic {
+    return sensorTopic != null;
   }
 
   String get userId {
@@ -54,6 +64,7 @@ class Auth extends ChangeNotifier {
       _token = responseData['token'];
       _userId = responseData['id'];
       _pumpTopic = responseData['pumpTopic'];
+      _sensorTopic = responseData['sensorTopic'];
       notifyListeners();
       final prefs = await SharedPreferences.getInstance();
       final userData = json.encode(
@@ -61,6 +72,7 @@ class Auth extends ChangeNotifier {
           'token': _token,
           'userId': _userId,
           'pumpTopic': _pumpTopic,
+          'sensorTopic': _sensorTopic,
         },
       );
       prefs.setString('userData', userData);
@@ -85,6 +97,7 @@ class Auth extends ChangeNotifier {
     _token = extractedUserData['token'];
     _userId = extractedUserData['userId'];
     _pumpTopic = extractedUserData['pumpTopic'];
+    _sensorTopic = extractedUserData['sensorTopic'];
     notifyListeners();
     return true;
   }
@@ -93,6 +106,7 @@ class Auth extends ChangeNotifier {
     _token = null;
     _userId = null;
     _pumpTopic = null;
+    _sensorTopic = null;
     clearData();
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();

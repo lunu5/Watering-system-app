@@ -17,19 +17,25 @@ enum MqttSubscriptionState { IDLE, SUBSCRIBED }
 class MQTTClientWrapper {
   MqttServerClient client;
   //final topic = 'room2_Pump';
-  final topic;
   MqttCurrentConnectionState mqttConnectionState =
       MqttCurrentConnectionState.IDLE;
   MqttSubscriptionState subscriptionState = MqttSubscriptionState.IDLE;
 
-  final VoidCallback onConnectedCallback;
-  final Function(List<dynamic>) onPumperChanged;
+  final pumpTopic;
+  final sensorTopic;
+  final Function(List<dynamic>) onPumpChanged;
+  final Function(Map<String, dynamic>) onSensorChanged;
 
-  MQTTClientWrapper(this.onConnectedCallback, this.topic, this.onPumperChanged);
+  MQTTClientWrapper({
+    @required this.pumpTopic,
+    @required this.sensorTopic,
+    @required this.onPumpChanged,
+    @required this.onSensorChanged,
+  });
 
   void prepareMqttClient() async {
     this.client = await _connectClient();
-    subscribeToTopic(this.topic);
+    subscribeToTopic(this.pumpTopic, this.sensorTopic);
     //_publishMessage('Hello');
   }
 
@@ -47,7 +53,7 @@ class MQTTClientWrapper {
     client.pongCallback = _pong;
 
     final connMessage = MqttConnectMessage()
-        .withClientIdentifier('Mqtt_MyClientUniqueId')
+        .withClientIdentifier('lol')
         .authenticateAs('gacontrolai', 'Gacontrolai@123')
         .keepAliveFor(60)
         .withWillTopic('willtopic')
@@ -78,9 +84,13 @@ class MQTTClientWrapper {
     return client;
   }
 
-  void subscribeToTopic(String topicName) {
-    print('MQTTClientWrapper::Subscribing to the $topicName topic');
-    this.client.subscribe(topicName, MqttQos.atLeastOnce);
+  void subscribeToTopic(String pumpTopic, String sensorTopic) {
+    print(
+        'MQTTClientWrapper::Subscribing to $pumpTopic topic and $sensorTopic topic');
+    if (pumpTopic != null)
+      this.client.subscribe(pumpTopic, MqttQos.atLeastOnce);
+    if (sensorTopic != null)
+      this.client.subscribe(sensorTopic, MqttQos.atLeastOnce);
 
     this.client.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) {
       final MqttPublishMessage message = c[0].payload;
@@ -88,12 +98,15 @@ class MQTTClientWrapper {
           MqttPublishPayload.bytesToStringAsString(message.payload.message);
 
       print('Received message:$payload from topic: ${c[0].topic}>');
-      if (payload.contains('id') && c[0].topic == topicName) onPumperChanged(jsonDecode(payload));
+      if (payload.contains('id') && c[0].topic == pumpTopic)
+        onPumpChanged(jsonDecode(payload));
+      if (payload.contains('tempArr') && c[0].topic == sensorTopic)
+        onSensorChanged(jsonDecode(payload));
     });
   }
 
   void _publishMessage(String message) {
-    final pubTopic = this.topic;
+    final pubTopic = this.pumpTopic;
     final builder = MqttClientPayloadBuilder();
     builder.addString(message);
     this.client.publishMessage(pubTopic, MqttQos.atLeastOnce, builder.payload);
@@ -122,7 +135,6 @@ class MQTTClientWrapper {
     mqttConnectionState = MqttCurrentConnectionState.CONNECTED;
     print(
         'MQTTClientWrapper::OnConnected client callback - Client connection was sucessful');
-    onConnectedCallback();
   }
 
   void _pong() {

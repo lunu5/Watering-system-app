@@ -73,6 +73,10 @@ flutter:
     - family: Anton
       fonts:
         - asset: assets/fonts/Anton-Regular.ttf
+    - family: Calibri
+      fonts:
+        - asset: assets/fonts/Calibri Bold.TTF
+          weight: 700
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

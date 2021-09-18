@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/http_exception.dart';
@@ -44,19 +42,19 @@ class AuthScreen extends StatelessWidget {
                   Flexible(
                     child: Container(
                       width: deviceSize.width * 0.9,
-                      margin: EdgeInsets.only(bottom: 10.0),
-                      padding: EdgeInsets.symmetric(
-                          vertical: 8.0, horizontal: 80.0),
-                      transform: Matrix4.rotationZ(-8 * pi / 180)
-                        ..translate(-10.0),
+                      margin: EdgeInsets.only(bottom: deviceSize.height * 0.05),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
+                      // transform: Matrix4.rotationZ(-8 * pi / 180)
+                      //   ..translate(-10.0),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         color: Colors.lightGreenAccent,
-                        boxShadow: [
+                        boxShadow: const [
                           BoxShadow(
-                            blurRadius: 8,
-                            color: Colors.black26,
-                            offset: Offset(0, 2),
+                            blurRadius: 10,
+                            color: Colors.black38,
+                            offset: Offset(5.0, 5.0),
                           )
                         ],
                       ),
@@ -65,17 +63,25 @@ class AuthScreen extends StatelessWidget {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color:
-                              Theme.of(context).accentTextTheme.headline1.color,
+                              Colors.black,
                           fontSize: 50,
-                          fontFamily: 'Anton',
-                          fontWeight: FontWeight.normal,
+                          fontFamily: 'Calibri',
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 5,
+                          shadows: [
+                            Shadow(
+                              blurRadius: 10.0,
+                              color: Theme.of(context).primaryColor,
+                              offset: Offset(5.0, 5.0),
+                            ),
+                          ],
                         ),
                       ),
                     ),
                   ),
                   Flexible(
                     flex: deviceSize.width > 600 ? 2 : 1,
-                    child: AuthCard(),
+                    child: const AuthCard(),
                   ),
                 ],
               ),

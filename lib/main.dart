@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'providers/pumper.dart';
+import 'providers/pump.dart';
 import 'providers/auth.dart';
 import 'providers/status.dart';
 import 'screens/auth_screen.dart';
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
           value: Status(),
         ),
         ChangeNotifierProvider.value(
-          value: Pumper(id: null, status: false),
+          value: Pump(id: null, status: false),
         ),
       ],
       child: Consumer<Auth>(
